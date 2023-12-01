@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "298118900879",
+    "project_id": "pomegranate-d1143",
+    "storage_bucket": "pomegranate-d1143.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:298118900879:android:73cb765f528cc49f2b14fa",
+        "android_client_info": {
+          "package_name": "com.pomegranate.pomegranate"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDoPE76Rlna_2jXrvFnk75rWrwpyV7xFTs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
