@@ -5,7 +5,9 @@ import 'package:pomegranate/Util/mysnackmsg.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Post extends StatefulWidget {
-  const Post({Key? key}) : super(key: key);
+  final String SelectedSemester;
+  final String SelectedModule;
+  const Post(this.SelectedSemester,this.SelectedModule);
 
   @override
   State<Post> createState() => _PostState();
@@ -28,10 +30,11 @@ class _PostState extends State<Post> {
   String? selectedItem;
 
   Future<void> _launchUrl() async {
-    if (!await launchUrl(_url,mode: LaunchMode.externalApplication)) {
+    if (!await launchUrl(_url, mode: LaunchMode.externalApplication)) {
       throw Exception('Could not launch $_url');
     }
   }
+
   reset() {
     tag.clear();
     inputTitle.clear();
@@ -53,13 +56,15 @@ class _PostState extends State<Post> {
     if (postList.isNotEmpty) {
       postList = [];
     }
-    await db.collection(dbRef).get().then((value) {
-      for (var e in value.docs) {
-        print(e);
-        postList.add(Post_Model.fromFirestore(e));
-      }
-      setState(() {});
-    });
+    await db.collection(dbRef).where("sem", isEqualTo: widget.SelectedSemester).get().then(
+      (value) {
+        for (var e in value.docs) {
+          print(e);
+          postList.add(Post_Model.fromFirestore(e));
+        }
+        setState(() {});
+      },
+    );
   }
 
   updatePost() async {
@@ -171,9 +176,10 @@ class _PostState extends State<Post> {
 
   void _runfilter() {
     List<Post_Model> results = [];
-    selectedItem==null?
-    results=postList:
-    results = postList.where((element) => element.tag == selectedItem).toList();
+    selectedItem == null
+        ? results = postList
+        : results =
+            postList.where((element) => element.tag == selectedItem).toList();
     setState(() {
       filter_postList = results;
     });
@@ -196,11 +202,11 @@ class _PostState extends State<Post> {
                   suffixIcon: selectedItem == null
                       ? null
                       : IconButton(
-                      icon: const Icon(Icons.clear),
-                      onPressed: () => setState(() {
-                        selectedItem = null;
-                        _runfilter();
-                      })),
+                          icon: const Icon(Icons.clear),
+                          onPressed: () => setState(() {
+                                selectedItem = null;
+                                _runfilter();
+                              })),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide(
@@ -213,13 +219,13 @@ class _PostState extends State<Post> {
                 items: items
                     .map(
                       (item) => DropdownMenuItem<String>(
-                    value: item,
-                    child: Text(item),
-                  ),
-                )
+                        value: item,
+                        child: Text(item),
+                      ),
+                    )
                     .toList(),
                 onChanged: (item) => setState(
-                      () {
+                  () {
                     selectedItem = item;
                     _runfilter();
                   },
@@ -245,7 +251,7 @@ class _PostState extends State<Post> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           IconButton(
-                            // const link="https://www.youtube.com/watch?v=s4tXuqbNymA",
+                              // const link="https://www.youtube.com/watch?v=s4tXuqbNymA",
 
                               onPressed: () {
                                 _url = Uri.parse(st.link.toString());
@@ -275,28 +281,27 @@ class _PostState extends State<Post> {
             children: [
               loading
                   ? const SizedBox(
-                height: 40,
-                width: 40,
-                child: CircularProgressIndicator(),
-              )
+                      height: 40,
+                      width: 40,
+                      child: CircularProgressIndicator(),
+                    )
                   : ElevatedButton(
-                  onPressed: () {
-                    isUpdate ? updatePost() : saveUser();
-                  },
-                  child: isUpdate
-                      ? const Text('Update data')
-                      : const Text('Save')),
+                      onPressed: () {
+                        isUpdate ? updatePost() : saveUser();
+                      },
+                      child: isUpdate
+                          ? const Text('Update data')
+                          : const Text('Save')),
               isUpdate
                   ? IconButton(
-                  onPressed: () {
-                    isUpdate = false;
-                    reset();
-
-                  },
-                  icon: const Icon(
-                    Icons.clear,
-                    color: Colors.red,
-                  ))
+                      onPressed: () {
+                        isUpdate = false;
+                        reset();
+                      },
+                      icon: const Icon(
+                        Icons.clear,
+                        color: Colors.red,
+                      ))
                   : const SizedBox()
             ],
           ),

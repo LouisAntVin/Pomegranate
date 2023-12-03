@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:oktoast/oktoast.dart';
+import 'package:pomegranate/post.dart';
 
 class Module extends StatefulWidget {
   final String SelectedBranch;
@@ -12,6 +13,7 @@ class Module extends StatefulWidget {
 
 class _ModuleState extends State<Module> {
   @override
+  late String _module;
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
@@ -73,7 +75,18 @@ class _ModuleState extends State<Module> {
                 ),
               ),
             ),
-            onTap: () => showToast( widget.SelectedBranch+" & "+widget.SelectedSemester , position: ToastPosition.center)),
+            onTap: ()  {
+              setState(() {
+                _module=text;
+              });
+
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Post(widget.SelectedSemester,_module),
+                ),
+              );
+            }),
       ),
     );
   }
