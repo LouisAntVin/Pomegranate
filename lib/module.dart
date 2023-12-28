@@ -1,93 +1,80 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:pomegranate/post.dart';
+import 'package:pomegranate/model/database_model.dart';
 
 class Module extends StatefulWidget {
   final String SelectedBranch;
   final String SelectedSemester;
-  const Module( this.SelectedBranch, this.SelectedSemester);
+  const Module(this.SelectedBranch, this.SelectedSemester);
 
   @override
   State<Module> createState() => _ModuleState();
 }
 
 class _ModuleState extends State<Module> {
-  @override
-  late String _module;
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        backgroundColor: Colors.grey[600], //
-        appBar: AppBar(
-          title: Text('Choose Your Module'),
-        ),
-        body: Container(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                CustomScrollView(
-                  primary: false,
-                  shrinkWrap: true,
-                  slivers: <Widget>[
-                    SliverPadding(
-                      padding: const EdgeInsets.all(20),
-                      sliver: SliverGrid.count(
-                        crossAxisSpacing: 10,
-                        mainAxisSpacing: 10,
-                        crossAxisCount: 2, // Updated to have 2 columns
-                        children: <Widget>[
-                          buildGridItem('1'),
-                          buildGridItem('2'),
-                          buildGridItem('3'),
-                          buildGridItem('4'),
-                          buildGridItem('5'),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
+  FirebaseFirestore db = FirebaseFirestore.instance;
+  List<dynamic> moduleList = [];
+  var _module;
+  getdata() async {
+    await db.collection('csbs').doc('5').get().then(
+      (value) {
+        moduleList = value.data()?["subject"];
+        print(moduleList);
+        setState(() {});
+      },
     );
   }
 
-  Widget buildGridItem(String text) {
-    return Material(
-      borderRadius: BorderRadius.circular(20),
-      child: OKToast(
-        child: InkWell(
-            splashColor: Colors.red,
-            borderRadius: BorderRadius.circular(20),
-            child: Container(
-              padding: const EdgeInsets.all(8),
-              child: Center(
-                child: Text(
-                  text,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 30, // Set the font size
-                    fontWeight: FontWeight.bold, // Make the text bold
-                    color: Colors.black, // Set the text color
-                  ),
+  @override
+  void initState() {
+    super.initState();
+    getdata();
+    print(moduleList);
+  }
+
+
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+          backgroundColor: Colors.grey[600], //
+          appBar: AppBar(
+            title: Text('Choose Your Subject'),
+          ),
+          body: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+              ),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: moduleList.length,
+                  itemBuilder: (context, index) {
+                    return InkWell(
+                      onTap: () {
+                        setState(() {
+                          _module=moduleList[index];
+
+                        });
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Post(widget.SelectedBranch,widget.SelectedSemester,_module),
+                          ),
+                        );
+                      },
+                      child: Card(
+                        child: ListTile(
+                          title: Text(moduleList[index].toString()),
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ),
-            ),
-            onTap: ()  {
-              setState(() {
-                _module=text;
-              });
-
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => Post(widget.SelectedSemester,_module),
-                ),
-              );
-            }),
-      ),
+            ],
+          )),
     );
   }
 }

@@ -5,9 +5,10 @@ import 'package:pomegranate/Util/mysnackmsg.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Post extends StatefulWidget {
+  final String SelectedBranch;
   final String SelectedSemester;
   final String SelectedModule;
-  const Post(this.SelectedSemester,this.SelectedModule);
+  const Post(this.SelectedBranch,this.SelectedSemester,this.SelectedModule);
 
   @override
   State<Post> createState() => _PostState();
@@ -172,6 +173,7 @@ class _PostState extends State<Post> {
     super.initState();
     getAllUsers();
     filter_postList = postList;
+    print(postList);
   }
 
   void _runfilter() {

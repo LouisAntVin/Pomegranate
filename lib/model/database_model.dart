@@ -10,7 +10,17 @@ class Subject_Model {
     this.subject,
     this.lab,
   });
-
+  /*
+  factory Subject_Model.fromFirestore(
+      DocumentSnapshot<Map<String, dynamic>> snapshot,
+      ) {
+    final data = snapshot.data();
+    return Subject_Model(
+        docID: snapshot.id,
+        subject: data?['subject'],
+        lab: data?['lab']
+    );
+  }*/
   factory Subject_Model.fromFirestore(
       DocumentSnapshot<Map<String, dynamic>> snapshot,
       ) {

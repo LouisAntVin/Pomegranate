@@ -35,7 +35,7 @@ class _BranchState extends State<Branch> {
                         crossAxisCount: 2, // Updated to have 2 columns
                         children: <Widget>[
                           buildGridItem('CSE'),
-                          buildGridItem('CSBS'),
+                          buildGridItem('csbs'),
                           buildGridItem('AIDS'),
                           buildGridItem('CE'),
                           buildGridItem('ME'),
