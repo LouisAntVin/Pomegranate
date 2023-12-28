@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pomegranate/module.dart';
+import 'package:pomegranate/home.dart';
 
 class Semester extends StatefulWidget {
   final String SelectedBranch;
@@ -84,7 +84,7 @@ class _SemesterState extends State<Semester> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => Module(widget.SelectedBranch,_semester),
+                builder: (context) => HomePage(widget.SelectedBranch,_semester),
               ),
             );
           }),
