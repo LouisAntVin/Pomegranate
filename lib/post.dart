@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:pomegranate/model/database_model.dart';
 import 'package:pomegranate/Util/mysnackmsg.dart';
+import 'package:pomegranate/newpost.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Post extends StatefulWidget {
@@ -58,7 +59,10 @@ class _PostState extends State<Post> {
     if (postList.isNotEmpty) {
       postList = [];
     }
-    await db.collection(dbRef).where("sem", isEqualTo: widget.SelectedSemester).get().then(
+    await db.collection(dbRef).where("branch", isEqualTo: widget.SelectedBranch)
+        .where("semester", isEqualTo: widget.SelectedSemester)
+        .where("subject", isEqualTo: widget.SelectedSubject)
+        .where("module", isEqualTo: widget.SelectedModule).get().then(
       (value) {
         for (var e in value.docs) {
           print(e);
@@ -192,9 +196,10 @@ class _PostState extends State<Post> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Firestore App'),
+        title: const Text('Results'),
       ),
-      body: Column(
+      body:
+      Column(
         children: [
           Padding(
             padding: const EdgeInsets.all(10.0),
@@ -237,78 +242,55 @@ class _PostState extends State<Post> {
             ),
           ),
           Expanded(
-            child: ListView.builder(
-              itemCount: filter_postList.length,
-              itemBuilder: (context, index) {
-                Post_Model st = filter_postList[index];
-                return InkWell(
-                  onTap: () {
-                    setUpdatePost(st);
-                  },
-                  child: Card(
-                    child: ListTile(
-                      leading: Text(st.tag.toString()),
-                      title: Text(st.title.toString()),
-                      subtitle: Text(st.link.toString()),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                              // const link="https://www.youtube.com/watch?v=s4tXuqbNymA",
+            child: RefreshIndicator(
+              onRefresh: () async {
+                getAllUsers();
+                _runfilter();
+              },
+              child: ListView.builder(
+                itemCount: filter_postList.length,
+                itemBuilder: (context, index) {
+                  Post_Model st = filter_postList[index];
+                  return InkWell(
+                    onTap: () {
+                      setUpdatePost(st);
+                    },
+                    child: Card(
+                      child: ListTile(
+                        leading: Text(st.tag.toString()),
+                        title: Text(st.title.toString()),
+                        subtitle: Text(st.link.toString()),
+                        trailing: IconButton(
+                                // const link="https://www.youtube.com/watch?v=s4tXuqbNymA",
 
-                              onPressed: () {
-                                _url = Uri.parse(st.link.toString());
-                                _launchUrl();
-                              },
-                              icon: const Icon(Icons.link)),
-                          IconButton(
-                              onPressed: () {
-                                onDelete(st);
-                                _runfilter();
-                              },
-                              icon: const Icon(Icons.delete)),
-                        ],
+                                onPressed: () {
+                                  _url = Uri.parse(st.link.toString());
+                                  _launchUrl();
+                                },
+                                icon: const Icon(Icons.link)),
                       ),
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
           ),
-          userInput('title', 'Enter title.', TextInputType.text, inputTitle,
-              readOnly: isUpdate),
-          userInput('tag', 'Enter tag', TextInputType.text, tag),
-          userInput('link', 'Enter link', TextInputType.text, link),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              loading
-                  ? const SizedBox(
-                      height: 40,
-                      width: 40,
-                      child: CircularProgressIndicator(),
-                    )
-                  : ElevatedButton(
-                      onPressed: () {
-                        isUpdate ? updatePost() : saveUser();
-                      },
-                      child: isUpdate
-                          ? const Text('Update data')
-                          : const Text('Save')),
-              isUpdate
-                  ? IconButton(
-                      onPressed: () {
-                        isUpdate = false;
-                        reset();
-                      },
-                      icon: const Icon(
-                        Icons.clear,
-                        color: Colors.red,
-                      ))
-                  : const SizedBox()
-            ],
-          ),
         ],
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.redAccent,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        tooltip: "New Post",
+        child: Icon(Icons.add),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => NewPost(widget.SelectedBranch,widget.SelectedSemester,widget.SelectedSubject,widget.SelectedModule),
+            ),
+          );
+        },
       ),
     );
   }

@@ -5,9 +5,11 @@ import 'package:pomegranate/Util/mysnackmsg.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Post extends StatefulWidget {
+  final String SelectedBranch;
   final String SelectedSemester;
+  final String SelectedSubject;
   final String SelectedModule;
-  const Post(this.SelectedSemester,this.SelectedModule);
+  const Post(this.SelectedBranch,this.SelectedSemester,this.SelectedSubject,this.SelectedModule);
 
   @override
   State<Post> createState() => _PostState();
@@ -188,6 +190,7 @@ class _PostState extends State<Post> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[600],
       appBar: AppBar(
         title: const Text('Firestore App'),
       ),
@@ -243,6 +246,7 @@ class _PostState extends State<Post> {
                     setUpdatePost(st);
                   },
                   child: Card(
+                    color: Colors.white70,
                     child: ListTile(
                       leading: Text(st.tag.toString()),
                       title: Text(st.title.toString()),
