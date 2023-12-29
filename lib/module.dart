@@ -19,7 +19,7 @@ class _ModuleState extends State<Module> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        backgroundColor: Colors.grey[600], //
+        backgroundColor: Color(0xFF30303B),//
         appBar: AppBar(
           title: Text('Choose Your Module'),
         ),

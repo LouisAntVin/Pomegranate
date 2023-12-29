@@ -16,7 +16,7 @@ class _SemesterState extends State<Semester> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        backgroundColor: Colors.grey[600],
+        backgroundColor: Color(0xFF30303B),
         appBar: AppBar(
           title: Text('Choose Your Semester'),
         ),

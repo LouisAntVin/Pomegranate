@@ -10,7 +10,8 @@ class Post extends StatefulWidget {
   final String SelectedSemester;
   final String SelectedSubject;
   final String SelectedModule;
-  const Post(this.SelectedBranch,this.SelectedSemester,this.SelectedSubject,this.SelectedModule);
+  const Post(this.SelectedBranch, this.SelectedSemester, this.SelectedSubject,
+      this.SelectedModule);
 
   @override
   State<Post> createState() => _PostState();
@@ -59,10 +60,14 @@ class _PostState extends State<Post> {
     if (postList.isNotEmpty) {
       postList = [];
     }
-    await db.collection(dbRef).where("branch", isEqualTo: widget.SelectedBranch)
+    await db
+        .collection(dbRef)
+        .where("branch", isEqualTo: widget.SelectedBranch)
         .where("semester", isEqualTo: widget.SelectedSemester)
         .where("subject", isEqualTo: widget.SelectedSubject)
-        .where("module", isEqualTo: widget.SelectedModule).get().then(
+        .where("module", isEqualTo: widget.SelectedModule)
+        .get()
+        .then(
       (value) {
         for (var e in value.docs) {
           print(e);
@@ -195,16 +200,19 @@ class _PostState extends State<Post> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFF30303B),
       appBar: AppBar(
         title: const Text('Results'),
       ),
-      body:
-      Column(
+      body: Column(
         children: [
           Padding(
             padding: const EdgeInsets.all(10.0),
-            child: SizedBox(
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20), color: Colors.white),
               child: DropdownButtonFormField<String>(
+                elevation: 6,
                 decoration: InputDecoration(
                   hintText: 'show',
                   suffixIcon: selectedItem == null
@@ -256,18 +264,23 @@ class _PostState extends State<Post> {
                       setUpdatePost(st);
                     },
                     child: Card(
+                      margin: EdgeInsets.symmetric( horizontal: 13, vertical: 5),
+
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                      ),
                       child: ListTile(
                         leading: Text(st.tag.toString()),
                         title: Text(st.title.toString()),
                         subtitle: Text(st.link.toString()),
                         trailing: IconButton(
-                                // const link="https://www.youtube.com/watch?v=s4tXuqbNymA",
+                            // const link="https://www.youtube.com/watch?v=s4tXuqbNymA",
 
-                                onPressed: () {
-                                  _url = Uri.parse(st.link.toString());
-                                  _launchUrl();
-                                },
-                                icon: const Icon(Icons.link)),
+                            onPressed: () {
+                              _url = Uri.parse(st.link.toString());
+                              _launchUrl();
+                            },
+                            icon: const Icon(Icons.link)),
                       ),
                     ),
                   );
@@ -287,7 +300,11 @@ class _PostState extends State<Post> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => NewPost(widget.SelectedBranch,widget.SelectedSemester,widget.SelectedSubject,widget.SelectedModule),
+              builder: (context) => NewPost(
+                  widget.SelectedBranch,
+                  widget.SelectedSemester,
+                  widget.SelectedSubject,
+                  widget.SelectedModule),
             ),
           );
         },

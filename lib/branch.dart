@@ -19,7 +19,7 @@ class _BranchState extends State<Branch> {
           title: Text('Choose Your Branch'),
         ),
         body: Container(
-          color: Colors.grey[600], // Set the overall background color to grey
+          color: Color(0xFF30303B), // Set the overall background color to grey
           child: SingleChildScrollView(
             child: Column(
               children: [
