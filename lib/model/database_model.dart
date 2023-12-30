@@ -2,13 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Subject_Model {
   final String? docID;
-  final List? lab;
-  final List? subject;
+  final List? SUBJECTS;
 
   Subject_Model({
     this.docID,
-    this.subject,
-    this.lab,
+    this.SUBJECTS,
   });
   /*
   factory Subject_Model.fromFirestore(
@@ -27,19 +25,12 @@ class Subject_Model {
     final data = snapshot.data();
     return Subject_Model(
       docID: snapshot.id,
-      subject: data?['subject'],
-      lab: data?['lab']
+      SUBJECTS: data?['SUBJECTS'],
     );
   }
-  Map<String, dynamic> toFirestore() {
-    return {
-      if (subject != null) "subject": subject,
-      if (lab != null) "lab": lab,
-
-    };
-  }
-
 }
+
+
 class Post_Model {
   final String? docID;
   final String? title;

@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:pomegranate/branch.dart';
 import 'package:pomegranate/firebase_options.dart';
+import 'package:pomegranate/login.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,9 +23,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.red,
+        backgroundColor: Color(0xFF30303B),
+
+
       ),
-      home: Splash(),
+      home: Login(),
     );
   }
 }
