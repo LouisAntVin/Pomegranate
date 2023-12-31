@@ -190,12 +190,7 @@ class _PostDetailState extends State<PostDetail> {
                               currentUser.displayName!.trim(),
                           child: IconButton(
                               onPressed: () {
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text("aa")
-                                  ],
-                                );
+
                                 //make a dupli of newpost call it update
                               },
                               icon: const Icon(Icons.edit)),
