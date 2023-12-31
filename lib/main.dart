@@ -25,10 +25,13 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.red,
         backgroundColor: Color(0xFF30303B),
+          appBarTheme: AppBarTheme(
+              backgroundColor: Colors.red,
+              )
 
 
       ),
-      home: Login(),
+      home: Splash(),
     );
   }
 }
@@ -49,7 +52,7 @@ class _SplashState extends State<Splash> {
       () => Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => Branch(),
+          builder: (context) => Login(),
         ),
       ),
     );

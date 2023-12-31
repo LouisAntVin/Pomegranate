@@ -13,8 +13,7 @@ class _BranchState extends State<Branch> {
   late String _branch;
 
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
+    return Scaffold(
         appBar: AppBar(
           title: Text('Choose Your Branch'),
         ),
@@ -53,8 +52,7 @@ class _BranchState extends State<Branch> {
             ),
           ),
         ),
-      ),
-    );
+      );
   }
 
   Widget buildGridItem(String text) {

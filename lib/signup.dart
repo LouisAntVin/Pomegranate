@@ -228,7 +228,7 @@ class _SignupFormState extends State<SignupForm> {
                   _formKey.currentState!.save();
 
                   AuthenticationHelper()
-                      .signUp(email: email!, password: password!)
+                      .signUp(email: email!, password: password!,name: name!)
                       .then((result) {
                     if (result == null) {
                       Navigator.pushReplacement(context,

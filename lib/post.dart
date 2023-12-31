@@ -1,8 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:pomegranate/Util/like.dart';
 import 'package:pomegranate/model/database_model.dart';
 import 'package:pomegranate/Util/mysnackmsg.dart';
 import 'package:pomegranate/newpost.dart';
+import 'package:pomegranate/post_details.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Post extends StatefulWidget {
@@ -18,7 +21,9 @@ class Post extends StatefulWidget {
 }
 
 class _PostState extends State<Post> {
+
   FirebaseFirestore db = FirebaseFirestore.instance;
+  final currentUser = FirebaseAuth.instance.currentUser!;
   String dbRef = 'post';
   Uri _url = Uri.parse('https://flutter.dev');
 
@@ -259,23 +264,38 @@ class _PostState extends State<Post> {
                 itemCount: filter_postList.length,
                 itemBuilder: (context, index) {
                   Post_Model st = filter_postList[index];
+
                   return InkWell(
                     onTap: () {
-                      setUpdatePost(st);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>  PostDetail(st,st.likes!.contains(currentUser.email)),
+                        ),
+                      ).then((value) => () {
+                        getAllUsers();
+                        _runfilter();
+                      });
                     },
                     child: Card(
-                      margin: EdgeInsets.symmetric( horizontal: 13, vertical: 5),
-
+                      margin: EdgeInsets.symmetric(horizontal: 13, vertical: 5),
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(10),
                       ),
                       child: ListTile(
-                        leading: Text(st.tag.toString()),
+                        leading: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Text(st.tag.toString()),
+                            LikeButton(
+                                isLiked: st.likes!.contains(currentUser.email),
+                                onTap: () { print(st.likes);}
+                            )
+                          ],
+                        ),
                         title: Text(st.title.toString()),
                         subtitle: Text(st.link.toString()),
                         trailing: IconButton(
-                            // const link="https://www.youtube.com/watch?v=s4tXuqbNymA",
-
                             onPressed: () {
                               _url = Uri.parse(st.link.toString());
                               _launchUrl();
@@ -306,7 +326,10 @@ class _PostState extends State<Post> {
                   widget.SelectedSubject,
                   widget.SelectedModule),
             ),
-          );
+          ).then((value) => () {
+            getAllUsers();
+            _runfilter();
+          });
         },
       ),
     );

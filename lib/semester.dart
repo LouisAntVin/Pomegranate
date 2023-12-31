@@ -14,8 +14,7 @@ class _SemesterState extends State<Semester> {
   @override
   var _semester;
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
+    return Scaffold(
         backgroundColor: Color(0xFF30303B),
         appBar: AppBar(
           title: Text('Choose Your Semester'),
@@ -53,8 +52,7 @@ class _SemesterState extends State<Semester> {
             ),
           ),
         ),
-      ),
-    );
+      );
   }
 
   Widget buildGridItem(String text) {

@@ -7,7 +7,8 @@ class Module extends StatefulWidget {
   final String SelectedBranch;
   final String SelectedSemester;
   final String SelectedSubject;
-  const Module( this.SelectedBranch, this.SelectedSemester,this.SelectedSubject);
+  const Module(
+      this.SelectedBranch, this.SelectedSemester, this.SelectedSubject);
 
   @override
   State<Module> createState() => _ModuleState();
@@ -17,9 +18,8 @@ class _ModuleState extends State<Module> {
   @override
   late String _module;
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        backgroundColor: Color(0xFF30303B),//
+    return Scaffold(
+        backgroundColor: Color(0xFF30303B), //
         appBar: AppBar(
           title: Text('Choose Your Module'),
         ),
@@ -52,8 +52,7 @@ class _ModuleState extends State<Module> {
             ),
           ),
         ),
-      ),
-    );
+      );
   }
 
   Widget buildGridItem(String text) {
@@ -61,34 +60,36 @@ class _ModuleState extends State<Module> {
       borderRadius: BorderRadius.circular(20),
       child: OKToast(
         child: InkWell(
-            splashColor: Colors.red,
-            borderRadius: BorderRadius.circular(20),
-            child: Container(
-              padding: const EdgeInsets.all(8),
-              child: Center(
-                child: Text(
-                  text,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 30, // Set the font size
-                    fontWeight: FontWeight.bold, // Make the text bold
-                    color: Colors.black, // Set the text color
-                  ),
+          splashColor: Colors.red,
+          borderRadius: BorderRadius.circular(20),
+          child: Container(
+            padding: const EdgeInsets.all(8),
+            child: Center(
+              child: Text(
+                text,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 30, // Set the font size
+                  fontWeight: FontWeight.bold, // Make the text bold
+                  color: Colors.black, // Set the text color
                 ),
               ),
             ),
-            onTap: ()  {
-              setState(() {
-                _module=text;
-              });
+          ),
+          onTap: () {
+            setState(() {
+              _module = text;
+            });
 
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => Post(widget.SelectedBranch,widget.SelectedSemester,widget.SelectedSubject,_module),
-                ),
-              );
-            }),
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Post(widget.SelectedBranch,
+                    widget.SelectedSemester, widget.SelectedSubject, _module),
+              ),
+            );
+          },
+        ),
       ),
     );
   }
