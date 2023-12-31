@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pomegranate/Util/like.dart';
+import 'package:pomegranate/home.dart';
 import 'package:pomegranate/model/database_model.dart';
 import 'package:pomegranate/Util/mysnackmsg.dart';
 import 'package:pomegranate/newpost.dart';
@@ -188,7 +189,6 @@ class _PostState extends State<Post> {
     super.initState();
     getAllUsers();
     filter_postList = postList;
-    print(postList);
   }
 
   void _runfilter() {
@@ -208,6 +208,25 @@ class _PostState extends State<Post> {
       backgroundColor: Color(0xFF30303B),
       appBar: AppBar(
         title: const Text('Results'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              getAllUsers();
+              filter_postList = postList;
+            },
+            icon: Icon(Icons.refresh),
+          ),
+          IconButton(
+            onPressed: () {
+              Navigator.pushAndRemoveUntil<void>(
+                context,
+                MaterialPageRoute<void>(builder: (BuildContext context) => HomePage(widget.SelectedBranch,widget.SelectedSemester)),
+                ModalRoute.withName('/'),
+              );
+            },
+            icon: Icon(Icons.home),
+          ),
+        ],
       ),
       body: Column(
         children: [
@@ -258,7 +277,7 @@ class _PostState extends State<Post> {
             child: RefreshIndicator(
               onRefresh: () async {
                 getAllUsers();
-                _runfilter();
+                filter_postList = postList;
               },
               child: ListView.builder(
                 itemCount: filter_postList.length,
@@ -274,7 +293,7 @@ class _PostState extends State<Post> {
                         ),
                       ).then((value) => () {
                         getAllUsers();
-                        _runfilter();
+                        filter_postList = postList;
                       });
                     },
                     child: Card(
@@ -286,15 +305,15 @@ class _PostState extends State<Post> {
                         leading: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            Text(st.tag.toString()),
                             LikeButton(
                                 isLiked: st.likes!.contains(currentUser.email),
                                 onTap: () { print(st.likes);}
-                            )
+                            ),
+                            Text(st.likes!.length.toString()),
                           ],
                         ),
                         title: Text(st.title.toString()),
-                        subtitle: Text(st.link.toString()),
+                        subtitle: Text(st.tag.toString()),
                         trailing: IconButton(
                             onPressed: () {
                               _url = Uri.parse(st.link.toString());
@@ -328,7 +347,7 @@ class _PostState extends State<Post> {
             ),
           ).then((value) => () {
             getAllUsers();
-            _runfilter();
+            filter_postList = postList;
           });
         },
       ),

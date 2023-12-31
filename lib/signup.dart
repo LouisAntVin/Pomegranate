@@ -14,7 +14,7 @@ class Signup extends StatelessWidget {
           // logo
           Column(
             children: [
-              Image.network(
+              Image.network(height: 100,
                   "https://png.pngtree.com/png-vector/20220709/ourmid/pngtree-half-of-pomegranate-icon-png-image_5592439.png"),
 
             ],
