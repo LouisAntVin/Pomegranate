@@ -79,7 +79,7 @@ class _SemesterState extends State<Semester> {
             setState(() {
               _semester = text; //here
             });
-            Navigator.push(
+            Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                 builder: (context) => HomePage(widget.SelectedBranch,_semester),

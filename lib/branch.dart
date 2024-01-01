@@ -80,7 +80,7 @@ class _BranchState extends State<Branch> {
               _branch=text;
             });
 
-            Navigator.push(
+            Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                 builder: (context) => Semester(_branch),

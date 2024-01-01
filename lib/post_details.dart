@@ -21,6 +21,7 @@ class _PostDetailState extends State<PostDetail> {
   FirebaseFirestore db = FirebaseFirestore.instance;
   final currentUser = FirebaseAuth.instance.currentUser!;
   bool isLiked = false;
+  bool isSaved = false;
   TextEditingController comment = TextEditingController();
   List<Comment_Model> commentList = [];
   bool loading = false;
@@ -132,6 +133,12 @@ class _PostDetailState extends State<PostDetail> {
       });
   }
 
+  void toggleSave() {
+    setState(() {
+      isSaved = !isSaved;
+    });
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -163,10 +170,10 @@ class _PostDetailState extends State<PostDetail> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(widget.SelectedPost.user!),
-                    Text(widget.SelectedPost.docID!),
-                    Text(widget.SelectedPost.disc!),
-                    Text(widget.SelectedPost.link!),
+                    Text(widget.SelectedPost.user!,style: TextStyle(fontSize: 12,color: Colors.black54)),
+                    Text(widget.SelectedPost.title!,style: TextStyle(fontSize: 18)),
+                    Divider(color: Colors.black87,indent: 10,endIndent: 10,),
+                    Text(widget.SelectedPost.disc!,style: TextStyle(fontSize: 16,color: Colors.black87)),
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -200,7 +207,8 @@ class _PostDetailState extends State<PostDetail> {
 
                               },
                               icon: const Icon(Icons.edit)),
-                        )
+                        ),
+                        SaveButton(isSaved: isSaved, onTap: toggleSave),
                       ],
                     ),
                   ],
@@ -208,6 +216,8 @@ class _PostDetailState extends State<PostDetail> {
               ),
             ),
           ),
+          Text("Comments",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 25)),
+          Divider(color: Colors.white38,indent: 15,endIndent: 15,),
           Expanded(
             child: ListView.builder(
               itemCount: commentList.length,

@@ -113,3 +113,36 @@ class Post_Model {
     };
   }
 }
+
+class Save_Post_Model {
+  final String? comID;
+  final String text;
+  final String user;
+  final String time;
+
+  Save_Post_Model({
+    this.comID,
+    required this.text,
+    required this.user,
+    required this.time,
+  });
+  factory Save_Post_Model.fromFirestore(
+      DocumentSnapshot<Map<String, dynamic>> snapshot,
+      ) {
+    final data = snapshot.data();
+    return Save_Post_Model(
+      comID: snapshot.id,
+      text: data?['text'],
+      user: data?['user'],
+      time: data?['time'],
+    );
+  }
+
+  Map<String, dynamic> toFirestore() {
+    return {
+      if (text != null) "text": text,
+      if(user != null) "user": user,
+      if(time != null) "time": time,
+    };
+  }
+}

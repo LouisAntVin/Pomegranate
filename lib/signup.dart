@@ -98,6 +98,9 @@ class _SignupFormState extends State<SignupForm> {
               if (value!.isEmpty) {
                 return 'Please enter some text';
               }
+              else if(!value.startsWith("u") & !value.endsWith("@rajagiri.edu.in")) {
+                return 'Please use Rajagiri email';
+              }
               return null;
             },
             onSaved: (val) {

@@ -17,3 +17,20 @@ class LikeButton extends StatelessWidget {
     ); // GestureDetector
   }
 }
+
+class SaveButton extends StatelessWidget {
+  final bool isSaved;
+  void Function() onTap;
+
+  SaveButton({super.key, required this.isSaved, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Icon(
+        isSaved ? Icons.bookmark : Icons.bookmark_border,
+      ),
+    );
+  }
+}
