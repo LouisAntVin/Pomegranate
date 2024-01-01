@@ -62,9 +62,9 @@ class _SplashState extends State<Splash> {
       backgroundColor: Color(0xFF30303B),
       body: Center(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.network(
-                "https://png.pngtree.com/png-vector/20220709/ourmid/pngtree-half-of-pomegranate-icon-png-image_5592439.png"),
+            Image.asset('assets/images/pome logo.png',height: 400,),
             Text(
               "Pomegranate",
               style: TextStyle(

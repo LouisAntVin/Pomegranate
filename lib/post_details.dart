@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:pomegranate/Util/like.dart';
 import 'package:pomegranate/Util/mysnackmsg.dart';
 import 'package:pomegranate/model/database_model.dart';
+import 'package:pomegranate/editpost.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PostDetail extends StatefulWidget {
@@ -190,8 +191,13 @@ class _PostDetailState extends State<PostDetail> {
                               currentUser.displayName!.trim(),
                           child: IconButton(
                               onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => EditPost(widget.SelectedPost),
+                                  ),
+                                );
 
-                                //make a dupli of newpost call it update
                               },
                               icon: const Icon(Icons.edit)),
                         )

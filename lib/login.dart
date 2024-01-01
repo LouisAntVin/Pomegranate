@@ -15,9 +15,7 @@ class Login extends StatelessWidget {
           // logo
           Column(
             children: [
-              Image.network(height: 150,
-                  "https://png.pngtree.com/png-vector/20220709/ourmid/pngtree-half-of-pomegranate-icon-png-image_5592439.png"),
-              SizedBox(height: 50),
+              Image.asset('assets/images/pome logo.png',height: 200,),
               Text(
                 'Welcome back!',
                 style: TextStyle(fontSize: 38, color: Colors.redAccent),

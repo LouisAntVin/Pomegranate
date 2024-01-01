@@ -10,19 +10,11 @@ class Signup extends StatelessWidget {
       body: ListView(
         padding: EdgeInsets.all(16.0),
         children: <Widget>[
-          SizedBox(height: 80),
-          // logo
-          Column(
-            children: [
-              Image.network(height: 100,
-                  "https://png.pngtree.com/png-vector/20220709/ourmid/pngtree-half-of-pomegranate-icon-png-image_5592439.png"),
-
-            ],
-          ),
           SizedBox(height: 50),
+          Image.asset('assets/images/pome logo.png',height: 200,),
           Text(
-            'Welcome!',
-            style: TextStyle(fontSize: 24,color: Colors.redAccent),
+            '\t Welcome!',
+            style: TextStyle(fontSize: 34,color: Colors.redAccent,fontWeight: FontWeight.bold),
           ),
 
           Padding(
