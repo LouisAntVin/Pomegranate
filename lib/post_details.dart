@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:pomegranate/Util/like.dart';
 import 'package:pomegranate/Util/mysnackmsg.dart';
 import 'package:pomegranate/model/database_model.dart';
@@ -25,6 +26,18 @@ class _PostDetailState extends State<PostDetail> {
   TextEditingController comment = TextEditingController();
   List<Comment_Model> commentList = [];
   bool loading = false;
+  final box = Hive.box('save');
+  var saveArray = [];
+
+  void savePost(String PostID) {
+    saveArray.add(PostID);
+    box.put(currentUser.email, saveArray);
+  }
+
+  void unsavePost(String PostID) {
+    saveArray.remove(PostID);
+    box.put(currentUser.email, saveArray);
+  }
 
   Future<void> _launchUrl(Uri _url) async {
     if (!await launchUrl(_url, mode: LaunchMode.externalApplication)) {
@@ -133,10 +146,15 @@ class _PostDetailState extends State<PostDetail> {
       });
   }
 
-  void toggleSave() {
+  void toggleSave(String PostID) {
     setState(() {
       isSaved = !isSaved;
     });
+    if (isSaved) {
+      savePost(PostID);
+    } else {
+      unsavePost(PostID);
+    }
   }
 
   @override
@@ -145,6 +163,8 @@ class _PostDetailState extends State<PostDetail> {
     super.initState();
     isLiked = widget.likepass;
     getAllComments();
+    saveArray = box.get(currentUser.email) ?? [];
+    isSaved = saveArray.contains(widget.SelectedPost.docID);
   }
 
   Widget build(BuildContext context) {
@@ -170,10 +190,17 @@ class _PostDetailState extends State<PostDetail> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(widget.SelectedPost.user!,style: TextStyle(fontSize: 12,color: Colors.black54)),
-                    Text(widget.SelectedPost.title!,style: TextStyle(fontSize: 18)),
-                    Divider(color: Colors.black87,indent: 10,endIndent: 10,),
-                    Text(widget.SelectedPost.disc!,style: TextStyle(fontSize: 16,color: Colors.black87)),
+                    Text(widget.SelectedPost.user!,
+                        style: TextStyle(fontSize: 12, color: Colors.black54)),
+                    Text(widget.SelectedPost.title!,
+                        style: TextStyle(fontSize: 18)),
+                    Divider(
+                      color: Colors.black87,
+                      indent: 10,
+                      endIndent: 10,
+                    ),
+                    Text(widget.SelectedPost.disc!,
+                        style: TextStyle(fontSize: 16, color: Colors.black87)),
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -201,14 +228,19 @@ class _PostDetailState extends State<PostDetail> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => EditPost(widget.SelectedPost),
+                                    builder: (context) =>
+                                        EditPost(widget.SelectedPost),
                                   ),
                                 );
-
                               },
                               icon: const Icon(Icons.edit)),
                         ),
-                        SaveButton(isSaved: isSaved, onTap: toggleSave),
+                        SaveButton(
+                            isSaved: isSaved,
+                            onTap: () {
+                              toggleSave(widget.SelectedPost.docID!);
+                              print(saveArray);
+                            }),
                       ],
                     ),
                   ],
@@ -216,8 +248,16 @@ class _PostDetailState extends State<PostDetail> {
               ),
             ),
           ),
-          Text("Comments",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 25)),
-          Divider(color: Colors.white38,indent: 15,endIndent: 15,),
+          Text("Comments",
+              style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 25)),
+          Divider(
+            color: Colors.white38,
+            indent: 15,
+            endIndent: 15,
+          ),
           Expanded(
             child: ListView.builder(
               itemCount: commentList.length,

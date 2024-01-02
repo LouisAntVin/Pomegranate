@@ -13,12 +13,13 @@ class _BranchState extends State<Branch> {
   late String _branch;
 
   Widget build(BuildContext context) {
+
     return Scaffold(
+      backgroundColor: Color(0xFF30303B),
         appBar: AppBar(
           title: Text('Choose Your Branch'),
         ),
         body: Container(
-          color: Color(0xFF30303B), // Set the overall background color to grey
           child: SingleChildScrollView(
             child: Column(
               children: [
@@ -31,7 +32,7 @@ class _BranchState extends State<Branch> {
                       sliver: SliverGrid.count(
                         crossAxisSpacing: 10,
                         mainAxisSpacing: 10,
-                        crossAxisCount: 2, // Updated to have 2 columns
+                        crossAxisCount: MediaQuery.of(context).size.width.floor() >500 ? 4 :2, // Updated to have 2 columns
                         children: <Widget>[
                           buildGridItem('CSE'),
                           buildGridItem('CSBS'),
@@ -67,7 +68,7 @@ class _BranchState extends State<Branch> {
               child: Text(
                 text,
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 30, // Set the font size
                   fontWeight: FontWeight.bold, // Make the text bold
                   color: Colors.black, // Set the text color

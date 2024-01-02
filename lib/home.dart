@@ -1,9 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:pomegranate/Util/authentication.dart';
 import 'package:pomegranate/login.dart';
 import 'package:pomegranate/profile.dart';
 import 'package:pomegranate/subject.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:pomegranate/Util/like.dart';
+import 'package:pomegranate/model/database_model.dart';
+import 'package:pomegranate/post_details.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatefulWidget {
   final String SelectedBranch;
@@ -15,6 +21,49 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final box = Hive.box('save');
+  var saveArray = [];
+  FirebaseFirestore db = FirebaseFirestore.instance;
+  final currentUser = FirebaseAuth.instance.currentUser!;
+  String dbRef = 'post';
+
+  bool loading = false;
+  List<Post_Model> postList = [];
+
+  Future<void> _launchUrl(Uri _url) async {
+    if (!await launchUrl(_url, mode: LaunchMode.externalApplication)) {
+      throw Exception('Could not launch $_url');
+    }
+  }
+
+
+  getSavedPost() async {
+    if (postList.isNotEmpty) {
+      postList = [];
+    }
+    await db
+        .collection(dbRef)
+        .where(FieldPath.documentId, whereIn: saveArray)
+        .get()
+        .then(
+          (value) {
+        for (var e in value.docs) {
+          print(e);
+          postList.add(Post_Model.fromFirestore(e));
+        }
+        setState(() {});
+      },
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    saveArray = box.get(currentUser.email) ?? [];
+    getSavedPost();
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,7 +92,13 @@ class _HomePageState extends State<HomePage> {
             },
             icon: Icon(Icons.logout),
             tooltip: 'Logout',
-          )
+          ),
+          IconButton(
+            onPressed: () {
+              getSavedPost();
+            },
+            icon: Icon(Icons.refresh),
+          ),
         ],
       ),
       body: Column(
@@ -141,6 +196,55 @@ class _HomePageState extends State<HomePage> {
             color: Colors.white12,
             indent: 15,
             endIndent: 15,
+          ),
+          Expanded(
+            child: RefreshIndicator(
+              onRefresh: () async {
+                getSavedPost();
+              },
+              child: ListView.builder(
+                itemCount: postList.length,
+                itemBuilder: (context, index) {
+                  Post_Model st = postList[index];
+
+                  return InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>  PostDetail(st,st.likes!.contains(currentUser.email)),
+                        ),
+                      );
+                    },
+                    child: Card(
+                      margin: EdgeInsets.symmetric(horizontal: 13, vertical: 5),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: ListTile(
+                        leading: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            LikeButton(
+                                isLiked: st.likes!.contains(currentUser.email),
+                                onTap: () { print(st.likes);}
+                            ),
+                            Text(st.likes!.length.toString()),
+                          ],
+                        ),
+                        title: Text(st.title.toString()),
+                        subtitle: Text(st.tag.toString()),
+                        trailing: IconButton(
+                            onPressed: () {
+                              _launchUrl(Uri.parse(st.link.toString()));
+                            },
+                            icon: const Icon(Icons.link)),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
           ),
         ],
       ),

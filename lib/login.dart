@@ -15,15 +15,18 @@ class Login extends StatelessWidget {
           // logo
           Column(
             children: [
-              Image.asset('assets/images/pome logo.png',height: 200,),
-              Text(
+              Image.asset(
+                'assets/images/pome logo.png',
+                height: 200,
+              ),
+              const Text(
                 'Welcome back!',
                 style: TextStyle(fontSize: 38, color: Colors.redAccent),
               ),
             ],
           ),
 
-          SizedBox(
+          const SizedBox(
             height: 50,
           ),
 
@@ -32,12 +35,12 @@ class Login extends StatelessWidget {
             child: LoginForm(),
           ),
 
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
 
           Row(
             children: <Widget>[
-              SizedBox(width: 30),
-              Text('New here ? ',
+              const SizedBox(width: 30),
+              const Text('New here ? ',
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
@@ -48,7 +51,7 @@ class Login extends StatelessWidget {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => Signup()));
                 },
-                child: Text('Get Registered Now!!',
+                child: const Text('Get Registered Now!!',
                     style: TextStyle(fontSize: 20, color: Colors.red)),
               )
             ],
@@ -71,7 +74,6 @@ class _LoginFormState extends State<LoginForm> {
 
   String? email;
   String? password;
-
   bool _obscureText = true;
 
   @override
@@ -108,7 +110,7 @@ class _LoginFormState extends State<LoginForm> {
               email = val;
             },
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
 

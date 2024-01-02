@@ -32,7 +32,7 @@ class _SemesterState extends State<Semester> {
                       sliver: SliverGrid.count(
                         crossAxisSpacing: 10,
                         mainAxisSpacing: 10,
-                        crossAxisCount: 2, // Updated to have 2 columns
+                        crossAxisCount: MediaQuery.of(context).size.width.floor() >500 ? 4 :2,// Updated to have 2 columns
                         children: <Widget>[
                           buildGridItem('1'),
                           buildGridItem('2'),

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:pomegranate/Util/like.dart';
 import 'package:pomegranate/home.dart';
 import 'package:pomegranate/model/database_model.dart';
-import 'package:pomegranate/Util/mysnackmsg.dart';
 import 'package:pomegranate/newpost.dart';
 import 'package:pomegranate/post_details.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -26,40 +25,18 @@ class _PostState extends State<Post> {
   FirebaseFirestore db = FirebaseFirestore.instance;
   final currentUser = FirebaseAuth.instance.currentUser!;
   String dbRef = 'post';
-  Uri _url = Uri.parse('https://flutter.dev');
 
-  TextEditingController inputTitle = TextEditingController();
-  TextEditingController tag = TextEditingController();
-  TextEditingController link = TextEditingController();
   bool loading = false;
-  bool isUpdate = false;
   String docID = '';
   List<Post_Model> postList = [];
   List<Post_Model> filter_postList = [];
   List items = ["youtube", "web", "notes", "Textbook"];
   String? selectedItem;
 
-  Future<void> _launchUrl() async {
+  Future<void> _launchUrl(Uri _url) async {
     if (!await launchUrl(_url, mode: LaunchMode.externalApplication)) {
       throw Exception('Could not launch $_url');
     }
-  }
-
-  reset() {
-    tag.clear();
-    inputTitle.clear();
-    link.clear();
-    setState(() {});
-  }
-
-  setUpdatePost(Post_Model st) {
-    setState(() {
-      isUpdate = true;
-      docID = st.docID ?? '';
-      tag.text = st.tag ?? '';
-      link.text = st.link ?? '';
-      inputTitle.text = st.title ?? '';
-    });
   }
 
   getAllUsers() async {
@@ -81,106 +58,6 @@ class _PostState extends State<Post> {
         }
         setState(() {});
       },
-    );
-  }
-
-  updatePost() async {
-    if (inputTitle.text.trim().isEmpty) {
-      showMsg(context, 'Enter title');
-    } else if (tag.text.trim().isEmpty) {
-      showMsg(context, 'Enter tag');
-    } else if (link.text.trim().isEmpty) {
-      showMsg(context, 'Enter link');
-    } else {
-      setState(() {
-        loading = true;
-      });
-
-      try {
-        Post_Model data = Post_Model(
-            title: inputTitle.text.trim(),
-            link: link.text.trim(),
-            tag: tag.text.trim());
-        await db
-            .collection(dbRef)
-            .doc(docID)
-            .update(data.toFirestore())
-            .then((value) {
-          setState(() {
-            loading = false;
-          });
-          showMsg(context, 'Data Updated!', isError: false);
-          getAllUsers();
-          isUpdate = false;
-          _runfilter();
-          reset();
-        });
-      } catch (e) {
-        setState(() {
-          loading = false;
-        });
-
-        showMsg(context, e.toString());
-      }
-    }
-  }
-
-  saveUser() async {
-    if (inputTitle.text.trim().isEmpty) {
-      showMsg(context, 'Enter title');
-    } else if (tag.text.trim().isEmpty) {
-      showMsg(context, 'Enter tag');
-    } else if (link.text.trim().isEmpty) {
-      showMsg(context, 'Enter link');
-    } else {
-      setState(() {
-        loading = true;
-      });
-
-      try {
-        Post_Model data = Post_Model(
-            title: inputTitle.text.trim(),
-            link: link.text.trim(),
-            tag: tag.text.trim());
-        await db.collection(dbRef).add(data.toFirestore()).then((value) {
-          setState(() {
-            loading = false;
-          });
-          showMsg(context, 'Data Saved!', isError: false);
-          getAllUsers();
-          _runfilter();
-          reset();
-        });
-      } catch (e) {
-        setState(() {
-          loading = false;
-        });
-
-        showMsg(context, e.toString());
-      }
-    }
-  }
-
-  onDelete(Post_Model st) async {
-    db.collection(dbRef).doc(st.docID).delete().then((value) {
-      showMsg(context, 'Post Deleted', isError: false);
-      setState(() {
-        getAllUsers();
-      });
-    });
-  }
-
-  userInput(String title, String hint, TextInputType type,
-      TextEditingController controller,
-      {bool readOnly = false}) {
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: TextField(
-        readOnly: readOnly,
-        controller: controller,
-        keyboardType: type,
-        decoration: InputDecoration(hintText: hint, labelText: title),
-      ),
     );
   }
 
@@ -316,8 +193,7 @@ class _PostState extends State<Post> {
                         subtitle: Text(st.tag.toString()),
                         trailing: IconButton(
                             onPressed: () {
-                              _url = Uri.parse(st.link.toString());
-                              _launchUrl();
+                              _launchUrl(Uri.parse(st.link.toString()));
                             },
                             icon: const Icon(Icons.link)),
                       ),
