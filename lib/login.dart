@@ -161,7 +161,6 @@ class _LoginFormState extends State<LoginForm> {
             child: ElevatedButton(
               onPressed: () {
                 // Respond to button press
-
                 if (_formKey.currentState!.validate()) {
                   _formKey.currentState!.save();
 
@@ -188,7 +187,7 @@ class _LoginFormState extends State<LoginForm> {
                     Radius.circular(24.0),
                   ),
                 ),
-              ),
+              ),// Login button
               child: Text(
                 'Login',
                 style: TextStyle(fontSize: 24),

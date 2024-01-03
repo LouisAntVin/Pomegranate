@@ -35,8 +35,6 @@ class _HomePageState extends State<HomePage> {
       throw Exception('Could not launch $_url');
     }
   }
-
-
   getSavedPost() async {
     if (postList.isNotEmpty) {
       postList = [];

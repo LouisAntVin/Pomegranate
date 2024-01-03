@@ -120,7 +120,8 @@ class _PostDetailState extends State<PostDetail> {
   }
 
   deletePost() async {
-    db.collection('post').doc(widget.SelectedPost.docID).delete().then((value) {
+    db.collection('post').doc(widget.SelectedPost.docID).delete()
+        .then((value) {
       showMsg(context, 'Post Deleted', isError: false);
       Navigator.of(context).pop();
     });

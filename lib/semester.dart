@@ -3,7 +3,6 @@ import 'package:pomegranate/home.dart';
 
 class Semester extends StatefulWidget {
   final String SelectedBranch;
-
   const Semester(this.SelectedBranch);
 
   @override
