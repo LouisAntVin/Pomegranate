@@ -1,0 +1,11 @@
+{
+  "hosting": {
+    "site": "pomegranate-b4cae",
+    "public": "build/web",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
+}

@@ -26,7 +26,6 @@ class _PostState extends State<Post> {
   final currentUser = FirebaseAuth.instance.currentUser!;
   String dbRef = 'post';
 
-  bool loading = false;
   String docID = '';
   List<Post_Model> postList = [];
   List<Post_Model> filter_postList = [];

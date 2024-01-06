@@ -55,6 +55,7 @@ class _NewPostState extends State<NewPost> {
           link: link.text.trim(),
           tag: selectedItem,
           user: FirebaseAuth.instance.currentUser!.displayName!,
+          email: FirebaseAuth.instance.currentUser!.email!,
           disc: disc.text.trim(),
           likes: [],
         );

@@ -62,8 +62,10 @@ class Post_Model {
   final String? tag;
   final String? link;
   final String? user;
+  final String? email;
   final String? disc;
   final List? likes;
+
 
   Post_Model({
     this.docID,
@@ -75,6 +77,7 @@ class Post_Model {
     this.tag,
     this.link,
     this.user,
+    this.email,
     this.disc,
     this.likes,
   });
@@ -93,6 +96,7 @@ class Post_Model {
       tag: data?['tag'],
       link: data?['link'],
       user: data?['user'],
+      email: data?['email'],
       disc: data?['disc'],
       likes: data?['likes'],
     );
@@ -108,8 +112,10 @@ class Post_Model {
       if (tag != null) "tag": tag,
       if (link != null) "link": link,
       if(user != null) "user": user,
+      if(email != null) "email": email,
       if(disc != null) "disc": disc,
       if(likes != null) "likes": likes,
+
     };
   }
 }
@@ -143,6 +149,43 @@ class Save_Post_Model {
       if (text != null) "text": text,
       if(user != null) "user": user,
       if(time != null) "time": time,
+    };
+  }
+}
+
+class Spam_Model {
+  final String? spamID;
+  final String text;
+  final String user;
+  final String time;
+  final String docID;
+
+  Spam_Model({
+    this.spamID,
+    required this.text,
+    required this.user,
+    required this.time,
+    required this.docID,
+  });
+  factory Spam_Model.fromFirestore(
+      DocumentSnapshot<Map<String, dynamic>> snapshot,
+      ) {
+    final data = snapshot.data();
+    return Spam_Model(
+      spamID: snapshot.id,
+      text: data?['text'],
+      user: data?['user'],
+      time: data?['time'],
+      docID: data?['docID'],
+    );
+  }
+
+  Map<String, dynamic> toFirestore() {
+    return {
+      if (text != null) "text": text,
+      if(user != null) "user": user,
+      if(time != null) "time": time,
+      if(docID != null) "docID": docID,
     };
   }
 }

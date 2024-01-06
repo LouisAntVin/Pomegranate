@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pomegranate/Util/authentication.dart';
+import 'package:pomegranate/admin_home.dart';
 import 'package:pomegranate/branch.dart';
 import 'package:pomegranate/signup.dart';
 
@@ -168,8 +169,14 @@ class _LoginFormState extends State<LoginForm> {
                       .signIn(email: email!, password: password!)
                       .then((result) {
                     if (result == null) {
-                      Navigator.pushReplacement(context,
-                          MaterialPageRoute(builder: (context) => Branch()));
+                      if(email!.trim()=="admin@gmail.com") {
+                        Navigator.pushReplacement(context,
+                            MaterialPageRoute(builder: (context) => HomePage()));
+                      }
+                      else {
+                        Navigator.pushReplacement(context,
+                            MaterialPageRoute(builder: (context) => Branch()));
+                      }
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
